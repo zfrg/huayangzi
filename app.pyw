@@ -3,7 +3,6 @@ import sys
 import time
 import tkinter
 import tkinter.simpledialog
-import webbrowser as wb
 import threading
 
 
@@ -23,6 +22,18 @@ try:
 except ModuleNotFoundError:
     install_lib("pystray")
     import pystray
+
+try:
+    import keyboard
+except ModuleNotFoundError:
+    install_lib("keyboard")
+    import keyboard
+
+try:
+    import webbrowser as wb
+except ModuleNotFoundError:
+    install_lib("webbrowser")
+    import webbrowser as wb
 
 
 def ooO00OOoOo__():
@@ -61,15 +72,10 @@ def ooO00OOoOo__():
 if os.path.exists('asset_info.json'):
     sys.stdout = ooO00OOoOo__()
 
-threads = []
 text = ''
 final_text = ''
 font_type = 1
-
-
-def on_quit_clicked():
-    icon.stop()
-    sys.exit()
+flag = True
 
 
 def change_type(n=None):
@@ -80,43 +86,53 @@ def change_type(n=None):
 
 
 def new():
-    global text, final_text, font_type
-    tk = tkinter.Tk()
-    tk.withdraw()
-    text = tkinter.simpledialog.askstring('花漾字生成器', '文字')
-    final_text = ''
-    if text:
-        if font_type == 1:
-            for i in range(len(text)):
-                final_text = final_text + text[i] + "҈"
-        elif font_type == 2:
-            for i in range(len(text)):
-                final_text = final_text + text[i] + "҉"
-        elif font_type == 3:
-            for i in range(len(text)):
-                final_text = final_text + text[i] + "=͟͟͞"
-        elif font_type == 4:
-            final_text = "ℒℴѵℯ·"
-            for i in range(len(text)):
-                final_text = final_text + text[i] + "·"
-            final_text = final_text + "ꦿ໊ོ"
-        pyperclip.copy(final_text)
-        icon.notify('复制成功！', '花漾字生成器')
-    tk.destroy()
+    global text, final_text, font_type, flag
+    if flag:
+        flag = False
+        tk = tkinter.Tk()
+        tk.withdraw()
+        text = tkinter.simpledialog.askstring('花漾字生成器', '输入文本：')
+        final_text = ''
+        if text:
+            if font_type == 1:
+                for i in range(len(text)):
+                    final_text = final_text + text[i] + "҈"
+            elif font_type == 2:
+                for i in range(len(text)):
+                    final_text = final_text + text[i] + "҉"
+            elif font_type == 3:
+                for i in range(len(text)):
+                    final_text = final_text + text[i] + "=͟͟͞"
+            elif font_type == 4:
+                final_text = "ℒℴѵℯ·"
+                for i in range(len(text)):
+                    final_text = final_text + text[i] + "·"
+                final_text = final_text + "ꦿ໊ོ"
+            elif font_type == 5:
+                final_text = "༒࿈"
+                for i in range(len(text)):
+                    final_text = final_text + text[i] + "༙྇"
+                final_text = final_text + "࿈༒"
+            pyperclip.copy(final_text)
+            icon.notify('复制成功！', '花漾字生成器')
+        tk.destroy()
+        flag = True
 
 
-image = Image.open("Icon.ico")
+image = Image.open(os.path.dirname(os.path.abspath(__file__)) + "\\icon.ico")
 
 submenu = pystray.Menu(pystray.MenuItem('花҈漾҈字҈', lambda: change_type(1)),
                        pystray.MenuItem('花҉漾҉字҉', lambda: change_type(2)),
                        pystray.MenuItem('花=͟͟͞͞ 漾=͟͟͞͞ 字=͟͟͞͞ ', lambda: change_type(3)),
-                       pystray.MenuItem('ℒℴѵℯ·花·漾·字·ꦿ໊ོ ', lambda: change_type(4)),)
+                       pystray.MenuItem('ℒℴѵℯ·花·漾·字·ꦿ໊ོ ', lambda: change_type(4)),
+                       pystray.MenuItem('༒࿈花༙྇漾༙྇字༙྇࿈༒', lambda: change_type(5)), )
 
 menu = pystray.Menu(
-    pystray.MenuItem('快速生成', lambda: threading.Thread(target=new, name='new').start(), default=True),
+    pystray.MenuItem('快速生成', lambda: threading.Thread(target=new, name='new', daemon=True).start(), default=True, ),
     pystray.MenuItem('字体样式', submenu),
     pystray.Menu.SEPARATOR,
-    pystray.MenuItem('退出', on_quit_clicked), )
+    pystray.MenuItem('退出', lambda: icon.stop()), )
 
 icon = pystray.Icon("name", image, "花漾字生成器", menu)
+keyboard.add_hotkey("ctrl+alt+q", lambda: threading.Thread(target=new, name='new', daemon=True).start())
 icon.run()
