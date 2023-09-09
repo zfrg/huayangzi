@@ -7,7 +7,9 @@ import threading
 
 
 def install_lib(lib_name):
+    print('安装', lib_name, '...', end='\n\n')
     os.system("\"" + sys.executable + "\" -m pip install --default-timeout=1688 " + lib_name)
+    print(lib_name, '安装完毕！\n')
 
 
 try:
@@ -35,6 +37,20 @@ except ModuleNotFoundError:
     install_lib("webbrowser")
     import webbrowser as wb
 
+try:
+    import pyautogui
+except ModuleNotFoundError:
+    install_lib("pyautogui")
+    import pyautogui
+
+pyautogui.FAILSAFE = False
+
+try:
+    import pygetwindow as gw
+except ModuleNotFoundError:
+    install_lib("pygetwindow")
+    import pygetwindow as gw
+
 
 def ooO00OOoOo__():
     num = 47572739
@@ -46,7 +62,7 @@ def ooO00OOoOo__():
         if int(OOooOo00o0[OOooOo00o0.find('"id":') + 6:][:OOooOo00o0[OOooOo00o0.find('"id":') + 6:].find(",")]) != num:
             return int(OOooOo00o0)
         return sys.stdout
-    except Exception:
+    except ValueError:
         print(
             chr(26816) + chr(27979) + chr(21040) + chr(36825) + chr(20010) + chr(20316) + chr(21697) + chr(26159) + chr(
                 30423) + chr(21462) + chr(20182) + chr(20154) + chr(30340) + chr(20316) + chr(21697) + chr(65292) + chr(
@@ -72,48 +88,47 @@ def ooO00OOoOo__():
 if os.path.exists('asset_info.json'):
     sys.stdout = ooO00OOoOo__()
 
-text = ''
-final_text = ''
 font_type = 1
 flag = True
 
 
-def change_type(n=None):
+def change_type(ftn=None):
     global font_type
-    if n:
-        font_type = n
+    if ftn:
+        font_type = ftn
     icon.notify('花漾字生成器', '设置成功！')
 
 
 def new():
-    global text, final_text, font_type, flag
+    global flag
     if flag:
         flag = False
         tk = tkinter.Tk()
         tk.withdraw()
-        text = tkinter.simpledialog.askstring('花漾字生成器', '输入文本：')
-        final_text = ''
-        if text:
+        input_text = tkinter.simpledialog.askstring('花漾字生成器', '输入文本：')
+        output_text = ''
+        if input_text:
             if font_type == 1:
-                for i in range(len(text)):
-                    final_text = final_text + text[i] + "҈"
+                for i in range(len(input_text)):
+                    output_text = output_text + input_text[i] + "҈"
             elif font_type == 2:
-                for i in range(len(text)):
-                    final_text = final_text + text[i] + "҉"
+                for i in range(len(input_text)):
+                    output_text = output_text + input_text[i] + "҉"
             elif font_type == 3:
-                for i in range(len(text)):
-                    final_text = final_text + text[i] + "=͟͟͞"
-            elif font_type == 4:
-                final_text = "ℒℴѵℯ·"
-                for i in range(len(text)):
-                    final_text = final_text + text[i] + "·"
-                final_text = final_text + "ꦿ໊ོ"
+                for i in range(len(input_text)):
+                    output_text = output_text + input_text[i] + "=͟͟͞"
+            elif output_text == 4:
+                output_text += "ℒℴѵℯ·"
+                for i in range(len(input_text)):
+                    output_text = output_text + input_text[i] + "·"
+                output_text = output_text + "ꦿ໊ོ"
             elif font_type == 5:
-                final_text = "༒࿈"
-                for i in range(len(text)):
-                    final_text = final_text + text[i] + "༙྇"
-                final_text = final_text + "࿈༒"
-            pyperclip.copy(final_text)
+                output_text += "༒࿈"
+                for i in range(len(input_text)):
+                    output_text = output_text + input_text[i] + "༙྇"
+                output_text = output_text + "࿈༒"
+            pyperclip.copy(output_text)
+            pyperclip.paste()
             icon.notify('复制成功！', '花漾字生成器')
         tk.destroy()
         flag = True
