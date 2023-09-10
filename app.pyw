@@ -138,7 +138,7 @@ image = Image.open(os.path.dirname(os.path.abspath(__file__)) + "\\icon.ico")
 
 submenu = pystray.Menu(pystray.MenuItem('花҈漾҈字҈', lambda: change_type(1)),
                        pystray.MenuItem('花҉漾҉字҉', lambda: change_type(2)),
-                       pystray.MenuItem('花=͟͟͞͞ 漾=͟͟͞͞ 字=͟͟͞͞ ', lambda: change_type(3)),
+                       pystray.MenuItem('花=͟͟͞͞ 漾=͟͟͞͞ 字=͟͟͞͞', lambda: change_type(3)),
                        pystray.MenuItem('ℒℴѵℯ·花·漾·字·ꦿ໊ོ ', lambda: change_type(4)),
                        pystray.MenuItem('༒࿈花༙྇漾༙྇字༙྇࿈༒', lambda: change_type(5)), )
 
